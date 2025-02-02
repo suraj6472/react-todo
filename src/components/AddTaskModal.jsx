@@ -1,32 +1,93 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useContext } from "react";
+import TaskContext from "../store/TaskContext";
 
 function AddTaskModal() {
+
+  const taskCtx = useContext(TaskContext)
+
   const [isOpen, setIsOpen] = useState(false);
+  const [task, setTask] = useState("");
+  const [datetime, setDateTime] = useState("");
+  const [detail, setDetail] = useState("");
+  const [image, setImage] = useState(null);
+  const fileInputValue = useRef(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const clearImage = () => {
+    setImage(null);
+    if (fileInputValue.current) {
+      fileInputValue.current.value = "";
+    }
+  };
+
+  const addTaskHandler = () => {
+    const taskObj = {
+      id: new Date().getTime(),
+      task,
+      datetime,
+      detail,
+      image,
+    };
+    taskCtx.addTask(taskObj)
+    setTask("");
+    setDateTime("");
+    setDetail("");
+    clearImage();
+    console.log(taskObj);
+  };
 
   return (
     <div className="relative min-h-screen bg-gray-100">
-      <button
-        className="fixed bottom-16 right-16 px-4 py-2 text-white bg-blue-500 rounded shadow-lg hover:bg-blue-600"
-        onClick={() => setIsOpen(true)}
-      >
+      <button className="fixed bottom-16 right-16 px-4 py-2 text-white bg-blue-500 rounded shadow-lg hover:bg-blue-600" onClick={() => setIsOpen(true)}>
         +
       </button>
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold text-gray-800">Modal Title</h2>
-            <p className="mt-4 text-gray-600">
-              This is a simple modal. You can add any content here.
-            </p>
+            <h2 className="text-2xl font-bold text-gray-800">Add New Task</h2>
+            <div className="mt-4 text-gray-600">
+              <form action="#" method="POST" encType="multipart/form-data">
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">Task</label>
+                  <input type="text" name="task" value={task} onChange={e => setTask(e.target.value)} className="w-full border-2 border-grey rounded-md p-2" placeholder="Enter some text" />
+                </div>
 
-            <div className="mt-6 flex justify-end">
-              <button
-                className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
-                onClick={() => setIsOpen(false)}
-              >
-                Close
-              </button>
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">Date & Time</label>
+                  <input type="datetime-local" name="datetime" value={datetime} onChange={e => setDateTime(e.target.value)} className="w-full border-2 border-grey rounded-md p-2" />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">Detail</label>
+                  <textarea name="detail" value={detail} onChange={e => setDetail(e.target.value)} rows="5" className="w-full border-2 border-grey rounded-md p-2" placeholder="Write something here..."></textarea>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">Image</label>
+                  {!!image && <img src={image} alt="Selected" className="mb-2 w-20 h-20 rounded-md border border-gray-300"/>}
+                  <input type="file" onChange={handleImageChange} name="image" ref={fileInputValue} accept="image/*" className="w-full border-2 border-grey rounded-md p-2" />
+                </div>
+
+                <div>
+                  <button type="button" onClick={addTaskHandler} className="w-full font-medium py-2 px-4 mb-2 rounded-md shadow bg-blue-500 text-white hover:bg-blue-600" >
+                    Submit
+                  </button>
+                  <button onClick={() => setIsOpen(false)} type="button" className="w-full font-medium py-2 px-4 rounded-md shadow text-white bg-red-500 hover:bg-red-600">
+                    Close
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
