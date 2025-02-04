@@ -6,9 +6,9 @@ function AddTaskModal() {
   const taskCtx = useContext(TaskContext)
 
   const [isOpen, setIsOpen] = useState(false);
-  const [task, setTask] = useState("");
-  const [datetime, setDateTime] = useState("");
-  const [detail, setDetail] = useState("");
+  const [title, setTitle] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const fileInputValue = useRef(null);
 
@@ -33,17 +33,16 @@ function AddTaskModal() {
   const addTaskHandler = () => {
     const taskObj = {
       id: new Date().getTime(),
-      task,
-      datetime,
-      detail,
+      title,
+      dueDate,
+      description,
       image,
     };
     taskCtx.addTask(taskObj)
-    setTask("");
-    setDateTime("");
-    setDetail("");
+    setTitle("");
+    setDueDate("");
+    setDescription("");
     clearImage();
-    console.log(taskObj);
   };
 
   return (
@@ -60,17 +59,17 @@ function AddTaskModal() {
               <form action="#" method="POST" encType="multipart/form-data">
                 <div className="mb-4">
                   <label className="block text-gray-700 font-medium mb-2">Task</label>
-                  <input type="text" name="task" value={task} onChange={e => setTask(e.target.value)} className="w-full border-2 border-grey rounded-md p-2" placeholder="Enter some text" />
+                  <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} className="w-full border-2 border-grey rounded-md p-2" placeholder="Enter some text" />
                 </div>
 
                 <div className="mb-4">
                   <label className="block text-gray-700 font-medium mb-2">Date & Time</label>
-                  <input type="datetime-local" name="datetime" value={datetime} onChange={e => setDateTime(e.target.value)} className="w-full border-2 border-grey rounded-md p-2" />
+                  <input type="datetime-local" name="dueDate" value={dueDate} onChange={e => setDueDate(e.target.value)} className="w-full border-2 border-grey rounded-md p-2" />
                 </div>
 
                 <div className="mb-4">
-                  <label className="block text-gray-700 font-medium mb-2">Detail</label>
-                  <textarea name="detail" value={detail} onChange={e => setDetail(e.target.value)} rows="5" className="w-full border-2 border-grey rounded-md p-2" placeholder="Write something here..."></textarea>
+                  <label className="block text-gray-700 font-medium mb-2">Description</label>
+                  <textarea name="description" value={description} onChange={e => setDescription(e.target.value)} rows="5" className="w-full border-2 border-grey rounded-md p-2" placeholder="Write something here..."></textarea>
                 </div>
 
                 <div className="mb-4">
