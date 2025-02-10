@@ -2,9 +2,11 @@ import React from 'react'
 import moment from 'moment';
 import { useContext } from 'react';
 import TaskContext from '../store/TaskContext';
+import { Pencil } from 'lucide-react';
+
 
 export default function Task({task}) {
-    const { updateTaskStatus, deleteTask, editTask } = useContext(TaskContext);
+    const { updateTaskStatus, deleteTask, updateTask } = useContext(TaskContext);
     let taskContainerClass = '';
     let taskTextClass = '';
     let taskStatusTitle = '';
@@ -52,16 +54,12 @@ export default function Task({task}) {
                 </button>
                 <button className="text-red-500" title="Delete" onClick={() => deleteTask(task.id)}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                        <path d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
-
-                <button className="text-blue-500" title="Edit" onClick={() => editTask(task.id)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 4h2m-1 0v12m0-12l3.5 3.5M19.5 21H4.5A2.5 2.5 0 012 18.5V8.5A2.5 2.5 0 014.5 6H9m10 5l-6-6" />
-                    </svg>
+                <button className="text-blue-500" title="Edit" onClick={() => updateTask(task.id)}>
+                    <Pencil color="red" size={18} />
                 </button>
-
             </div>
         </div>
         <p className='mt-2'>
