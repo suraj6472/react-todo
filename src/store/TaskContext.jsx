@@ -6,6 +6,8 @@ const TaskContext = createContext({
   addTask: () => {},
   filters: {},
   updateFilters: () => {},
+  isTaskModalOpen: false,
+  editableTask: null,
 });
 
 export default TaskContext;
@@ -16,7 +18,6 @@ const taskUpdateReducer = (state, action) => {
       ...state,
       { ...action.payload, status: "pending", created_at: new Date() },
     ];
-    console.log(state);
     return state;
   }
 
@@ -33,12 +34,18 @@ const taskUpdateReducer = (state, action) => {
     return [...state].map((task) => task.id == action.payload.id ? { ...task, ...updateTaskObj } : task  );
   }
 
+  if (action.identifier == "delete_task") {
+    return [...state].filter((task) => task.id != action.payload);
+  }
+
   return state;
 };
 
 export function TaskContextProvider({ children }) {
   const [tasks, dispatchTaskUpdateAction] = useReducer(taskUpdateReducer, []);
   const [filters, setFilter] = useState({ search: "", status: "", sortBy: "" });
+  const [isTaskModalOpen, toggleTaskModal] = useState(false);
+  const [editableTask, setEditableTask] = useState(null);
 
   const addTask = (taskObj) => {
     dispatchTaskUpdateAction({ identifier: "add_task", payload: taskObj });
@@ -46,6 +53,11 @@ export function TaskContextProvider({ children }) {
 
   const updateFilters = (filterObj) => {
     setFilter({ ...filters, ...filterObj });
+  };
+
+  const taskModalVisibilityToggle = (editableTask = false) => {
+    setEditableTask(editableTask);
+    toggleTaskModal(!isTaskModalOpen);
   };
 
   const updateTaskStatus = (taskId, status) => {
@@ -74,6 +86,9 @@ export function TaskContextProvider({ children }) {
     updateTaskStatus,
     deleteTask,
     updateTask,
+    isTaskModalOpen,
+    taskModalVisibilityToggle,
+    editableTask,
   };
 
   return (

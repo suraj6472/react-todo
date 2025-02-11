@@ -1,15 +1,14 @@
 import React, { useState, useRef, useContext } from "react";
 import TaskContext from "../store/TaskContext";
 
-function AddTaskModal() {
-
+function TaskModal() 
+{
   const taskCtx = useContext(TaskContext)
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
+  const { editableTask, addTask, isTaskModalOpen, taskModalVisibilityToggle, updateTask } = taskCtx;
+  const [title, setTitle] = useState(editableTask ? editableTask.title : "");
+  const [dueDate, setDueDate] = useState(editableTask ? editableTask.dueDate : "");
+  const [description, setDescription] = useState(editableTask ? editableTask.description : "");
+  const [image, setImage] = useState(editableTask ? editableTask.image : "");
   const fileInputValue = useRef(null);
 
   const handleImageChange = (e) => {
@@ -32,13 +31,13 @@ function AddTaskModal() {
 
   const addTaskHandler = () => {
     const taskObj = {
-      id: new Date().getTime(),
+      id: editableTask ? editableTask.id : new Date().getTime(),
       title,
       dueDate,
       description,
       image,
     };
-    taskCtx.addTask(taskObj)
+    editableTask ? updateTask(taskObj) : addTask(taskObj)
     setTitle("");
     setDueDate("");
     setDescription("");
@@ -47,14 +46,14 @@ function AddTaskModal() {
 
   return (
     <div className="relative min-h-screen bg-gray-100">
-      <button className="fixed bottom-16 right-16 px-4 py-2 text-white bg-blue-500 rounded shadow-lg hover:bg-blue-600" onClick={() => setIsOpen(true)}>
+      <button className="fixed bottom-16 right-16 px-4 py-2 text-white bg-blue-500 rounded shadow-lg hover:bg-blue-600" onClick={() => taskModalVisibilityToggle()}>
         +
       </button>
 
-      {isOpen && (
+      {isTaskModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold text-gray-800">Add New Task</h2>
+            <h2 className="text-2xl font-bold text-gray-800">{editableTask ? 'Update Task' : 'Add New Task'}</h2>
             <div className="mt-4 text-gray-600">
               <form action="#" method="POST" encType="multipart/form-data">
                 <div className="mb-4">
@@ -82,7 +81,7 @@ function AddTaskModal() {
                   <button type="button" onClick={addTaskHandler} className="w-full font-medium py-2 px-4 mb-2 rounded-md shadow bg-blue-500 text-white hover:bg-blue-600" >
                     Submit
                   </button>
-                  <button onClick={() => setIsOpen(false)} type="button" className="w-full font-medium py-2 px-4 rounded-md shadow text-white bg-red-500 hover:bg-red-600">
+                  <button onClick={() => taskModalVisibilityToggle()} type="button" className="w-full font-medium py-2 px-4 rounded-md shadow text-white bg-red-500 hover:bg-red-600">
                     Close
                   </button>
                 </div>
@@ -95,4 +94,4 @@ function AddTaskModal() {
   );
 }
 
-export default AddTaskModal;
+export default TaskModal;

@@ -6,7 +6,7 @@ import { Pencil } from 'lucide-react';
 
 
 export default function Task({task}) {
-    const { updateTaskStatus, deleteTask, updateTask } = useContext(TaskContext);
+    const { updateTaskStatus, deleteTask, taskModalVisibilityToggle } = useContext(TaskContext);
     let taskContainerClass = '';
     let taskTextClass = '';
     let taskStatusTitle = '';
@@ -47,6 +47,7 @@ export default function Task({task}) {
                         <path d="M5 13l4 4L19 7" />
                     </svg>
                 </button>
+                
                 <button className="text-red-500" title="Overdue" onClick={() => updateTaskStatus(task.id, 'overdue')}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
                         <path d="M12 8v4l3 3" />
@@ -57,7 +58,7 @@ export default function Task({task}) {
                         <path d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
-                <button className="text-blue-500" title="Edit" onClick={() => updateTask(task.id)}>
+                <button className="text-blue-500" title="Edit" onClick={() => taskModalVisibilityToggle(task)}>
                     <Pencil color="red" size={18} />
                 </button>
             </div>
