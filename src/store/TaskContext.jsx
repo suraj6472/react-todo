@@ -31,7 +31,9 @@ const taskUpdateReducer = (state, action) => {
 
   if (action.identifier == "update_task") {
     const updateTaskObj = action.payload.updateTaskObj;
-    return [...state].map((task) => task.id == action.payload.id ? { ...task, ...updateTaskObj } : task  );
+    return [...state].map((task) =>
+      task.id == action.payload.id ? { ...task, ...updateTaskObj } : task
+    );
   }
 
   if (action.identifier == "delete_task") {
@@ -56,6 +58,7 @@ export function TaskContextProvider({ children }) {
   };
 
   const taskModalVisibilityToggle = (editableTask = false) => {
+    console.log(editableTask);
     setEditableTask(editableTask);
     toggleTaskModal(!isTaskModalOpen);
   };
