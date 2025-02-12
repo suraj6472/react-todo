@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext } from "react";
 import TaskContext from "../store/TaskContext";
 
-function AddTaskModal() {
+function TaskModal() {
 
   const taskCtx = useContext(TaskContext)
 
@@ -95,4 +95,4 @@ function AddTaskModal() {
   );
 }
 
-export default AddTaskModal;
+export default TaskModal;

@@ -1,7 +1,7 @@
 import "./App.css";
 import Sidebar from "./components/Sidebar";
 import Main from "./components/Main";
-import AddTaskModal from "./components/AddTaskModal";
+import TaskModal from "./components/TaskModal";
 import { TaskContextProvider } from "./store/TaskContext";
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
         <div className="flex h-screen">
           <Sidebar />
           <Main />
-          <AddTaskModal />
+          <TaskModal />
         </div>
       </div>
     </TaskContextProvider>
